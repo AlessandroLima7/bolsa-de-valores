@@ -1,4 +1,4 @@
-# bolsa-de-valores
+# Bolsa de valores
 
 Este é um projeto pessoal feito para aplicar na prática meus conhecimentos adquiridos quanto ao Java com Spring Boot. 
 
