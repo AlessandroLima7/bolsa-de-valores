@@ -11,4 +11,4 @@ Toda compra e venda traz alguma alteração no valor atual da ação.
 Em breve, serão colocadas as rotas existentes no projeto e o tutorial de inicialização. 
 
 
-# Agradeço pelo interesse meu meu código.
+# Agradeço pelo interesse em meu código.
