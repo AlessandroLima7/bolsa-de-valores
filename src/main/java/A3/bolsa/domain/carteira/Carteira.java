@@ -18,7 +18,8 @@ public class Carteira {
     private String descricaoDoPapel;
     private Integer quantidade;
 
-    public Carteira(String nomePapel, String sigla, Double valor, String descricaoDoPapel, Integer quantidade){
+    public Carteira(Long idInvestidor, String nomePapel, String sigla, Double valor, String descricaoDoPapel, Integer quantidade){
+        this.fkInvestidor = idInvestidor;
         this.nomePapel = nomePapel;
         this.sigla = sigla;
         this.valor = valor;
