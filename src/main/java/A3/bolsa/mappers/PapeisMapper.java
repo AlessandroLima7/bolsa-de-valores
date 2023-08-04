@@ -1,6 +1,7 @@
 package A3.bolsa.mappers;
 
 import A3.bolsa.domain.papeis.Papeis;
+import A3.bolsa.domain.papeis.dto.CadastroPapelDto;
 import A3.bolsa.domain.papeis.dto.DadosPapeisDto;
 import A3.bolsa.entities.CarteiraEntity;
 import A3.bolsa.entities.PapeisEntity;
@@ -19,10 +20,12 @@ public interface PapeisMapper {
 
     Papeis mapToPapeis(PapeisEntity papeis);
 
+    Papeis cadastroDtoToModel(CadastroPapelDto papel);
+
 
     DadosPapeisDto mapToDadosPapeisDto(Papeis papeis);
 
-
+    List<PapeisEntity> listModelToEntity(List<Papeis> papeis);
     List<Papeis> entityToModel(List<PapeisEntity> papeis);
 
 

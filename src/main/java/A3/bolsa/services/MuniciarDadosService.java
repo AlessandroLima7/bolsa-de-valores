@@ -1,7 +1,9 @@
 package A3.bolsa.services;
 
 import A3.bolsa.domain.investidor.Investidor;
+import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
 import A3.bolsa.domain.papeis.Papeis;
+import A3.bolsa.domain.papeis.dto.CadastroPapelDto;
 import A3.bolsa.entities.CarteiraEntity;
 import A3.bolsa.entities.InvestidorEntity;
 import A3.bolsa.mappers.InvestidorMapper;
@@ -13,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MuniciarDadosService implements ApplicationRunner {
@@ -37,19 +42,23 @@ public class MuniciarDadosService implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        var papel1 = new Papeis("Itaú Unibanco", "ITUB4", 28.27, "O Itaú é um banco muito antigo e sólido no mercado. Oferecendo os mais diversos serviços financeiros.", 1000);
-        var papel2 = new Papeis("Banco Bradesco", "BBDC4", 16.57, "O Bradesco é um banco.", 1000);
-        var papelEntity1 = papeisMapper.modelToEntity(papel1);
-        var papelEntity2 = papeisMapper.modelToEntity(papel2);
-        papelRepository.save(papelEntity1);
-        papelRepository.save(papelEntity2);
+
+        //Subindo as ações no H2
+        List<Papeis> papeis = new ArrayList<>();
+        papeis.add(new Papeis(new CadastroPapelDto("Itaú Unibanco", "ITUB4", 28.27, "O Itaú é um banco muito antigo e sólido no mercado. Oferecendo os mais diversos serviços financeiros.", 700)));
+        papeis.add(new Papeis(new CadastroPapelDto("Banco Bradesco", "BBDC4", 16.57, "O Bradesco é um banco.", 1000)));
+        papeis.add(new Papeis(new CadastroPapelDto("Vivo Telefônica Brasil", "VIVT4", 42.27, "Empresa que atua em telecomunicações.", 100)));
+
+        papelRepository.saveAll(papeisMapper.listModelToEntity(papeis));
 
 
-        var investidor = new Investidor("Alessandro", "Lima", "alessandro@hotmail.com", "ale");
+        //Subindo investidores no H2
+        List<Investidor> investidores = new ArrayList<>();
+        investidores.add(new Investidor(new CadastroInvestidorDto("Alessandro", "Lima", "alessandro@hotmail.com", "ale")));
+        investidores.add(new Investidor(new CadastroInvestidorDto("Marcos", "Medeiros", "marcos@hotmail.com", "marcos")));
+        investidores.add(new Investidor(new CadastroInvestidorDto("Gustavo", "Guanabara", "gustavo@hotmail.com", "gustavo")));
 
-        var investidorEntity1 = investidorMapper.modelToEntity(investidor);
-
-        investidorRepository.save(investidorEntity1);
+        investidorRepository.saveAll(investidorMapper.listModelToEntity(investidores));
 
 
 

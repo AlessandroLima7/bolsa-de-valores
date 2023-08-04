@@ -1,5 +1,6 @@
 package A3.bolsa.domain.papeis;
 
+import A3.bolsa.domain.papeis.dto.CadastroPapelDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,12 +32,12 @@ public class Papeis  {
 
     private Integer quantidade;
 
-    public Papeis(String nome, String sigla, Double valor, String descricao, Integer quantidade){
-        this.nomePapel = nome;
-        this.sigla = sigla;
-        this.valor = valor;
-        this.descricaoDoPapel = descricao;
-        this.quantidade = quantidade;
+    public Papeis(CadastroPapelDto cadastroPapelDto){
+        this.nomePapel = cadastroPapelDto.nomePapel();
+        this.sigla = cadastroPapelDto.sigla();
+        this.valor = cadastroPapelDto.valor();
+        this.descricaoDoPapel = cadastroPapelDto.descricaoPapel();
+        this.quantidade = cadastroPapelDto.quantidade();
     }
 
 }
