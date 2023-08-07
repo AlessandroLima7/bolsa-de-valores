@@ -22,17 +22,17 @@ public class CarteiraEntity {
     @Column(name = "fk_investidor")
     private Long fkInvestidor;
 
+    @Column(name = "id_papel")
+    private Long idPapel;
+
     @Column(name = "nome")
     private String nomePapel;
 
     @Column(name = "sigla")
     private String sigla;
 
-    @Column(name = "valor")
-    private Double valor;
-
-    @Column(name = "valor_passado")
-    private Double valorAnterior;
+    @Column(name = "valor_de_compra")
+    private Double valorDeCompra;
 
     @Column(name = "descricao_papel")
     private String descricaoDoPapel;

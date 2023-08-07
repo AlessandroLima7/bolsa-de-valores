@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,6 +40,13 @@ public class Papeis  {
         this.valor = cadastroPapelDto.valor();
         this.descricaoDoPapel = cadastroPapelDto.descricaoPapel();
         this.quantidade = cadastroPapelDto.quantidade();
+    }
+
+    public void updateValor(Double valorNovo){
+        var df = new DecimalFormat("#.##");
+        var v = df.format(valorNovo).toString().replace(",", ".");
+        this.valorAnterior = this.valor;
+        this.valor = Double.parseDouble(v);
     }
 
 }

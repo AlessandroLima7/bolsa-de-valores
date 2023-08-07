@@ -11,20 +11,21 @@ public class Carteira {
 
     private Long id;
     private Long fkInvestidor;
+    private Long idPapel;
     private String nomePapel;
     private String sigla;
-    private Double valor;
-    private Double valorAnterior;
+    private Double valorDeCompra;
     private String descricaoDoPapel;
     private Integer quantidade;
 
-    public Carteira(Long idInvestidor, String nomePapel, String sigla, Double valor, String descricaoDoPapel, Integer quantidade){
+    public Carteira(Long idInvestidor, String nomePapel, String sigla, Double valor, String descricaoDoPapel, Integer quantidade, Long idPapel){
         this.fkInvestidor = idInvestidor;
         this.nomePapel = nomePapel;
         this.sigla = sigla;
-        this.valor = valor;
+        this.valorDeCompra = valor;
         this.descricaoDoPapel = descricaoDoPapel;
         this.quantidade = quantidade;
+        this.idPapel = idPapel;
     }
 
 }

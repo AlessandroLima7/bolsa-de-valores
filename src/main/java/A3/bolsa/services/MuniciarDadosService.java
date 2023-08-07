@@ -4,8 +4,6 @@ import A3.bolsa.domain.investidor.Investidor;
 import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
 import A3.bolsa.domain.papeis.Papeis;
 import A3.bolsa.domain.papeis.dto.CadastroPapelDto;
-import A3.bolsa.entities.CarteiraEntity;
-import A3.bolsa.entities.InvestidorEntity;
 import A3.bolsa.mappers.InvestidorMapper;
 import A3.bolsa.mappers.PapeisMapper;
 import A3.bolsa.repositories.CarteiraRepository;
@@ -60,7 +58,8 @@ public class MuniciarDadosService implements ApplicationRunner {
 
         investidorRepository.saveAll(investidorMapper.listModelToEntity(investidores));
 
-
+        var bolsaEmTempoReal = new BolsaThread(papelRepository, papeisMapper);
+        bolsaEmTempoReal.start();
 
     }
 }

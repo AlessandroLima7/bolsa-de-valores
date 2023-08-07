@@ -28,10 +28,12 @@ public class TransacoesController {
     @Transactional
     public ResponseEntity buyPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @PathVariable Long investidor){
 
+
         var usuarioLogado = repository.findById(investidor);
         if(usuarioLogado.isPresent()){
             return processor.buyPapelInvestidor(transacao, mapper.entityToModel(usuarioLogado.get()));
         }
+
         return ResponseEntity.badRequest().build();
     }
 

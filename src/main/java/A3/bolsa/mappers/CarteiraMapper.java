@@ -25,4 +25,5 @@ public interface CarteiraMapper {
     @Bean
     List<CarteiraEntity> listModelToEntity(List<Carteira> investidores);
 
+
 }
