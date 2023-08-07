@@ -45,9 +45,9 @@ public class MuniciarDadosService implements ApplicationRunner {
 
         //Subindo as ações no H2
         List<Papeis> papeis = new ArrayList<>();
-        papeis.add(new Papeis(new CadastroPapelDto("Itaú Unibanco", "ITUB4", 28.27, "O Itaú é um banco muito antigo e sólido no mercado. Oferecendo os mais diversos serviços financeiros.", 700)));
-        papeis.add(new Papeis(new CadastroPapelDto("Banco Bradesco", "BBDC4", 16.57, "O Bradesco é um banco.", 1000)));
-        papeis.add(new Papeis(new CadastroPapelDto("Vivo Telefônica Brasil", "VIVT4", 42.27, "Empresa que atua em telecomunicações.", 100)));
+        papeis.add(new Papeis(new CadastroPapelDto("Itaú Unibanco", "ITUB4", 28.27, "O Itaú é um banco muito antigo e sólido no mercado. Oferecendo os mais diversos serviços financeiros.", 22000)));
+        papeis.add(new Papeis(new CadastroPapelDto("Banco Bradesco", "BBDC4", 16.57, "O Bradesco é um banco.", 30000)));
+        papeis.add(new Papeis(new CadastroPapelDto("Vivo Telefônica Brasil", "VIVT4", 42.27, "Empresa que atua em telecomunicações.", 10000)));
 
         papelRepository.saveAll(papeisMapper.listModelToEntity(papeis));
 

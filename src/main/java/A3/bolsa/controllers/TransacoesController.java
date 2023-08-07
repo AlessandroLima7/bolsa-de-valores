@@ -4,6 +4,7 @@ import A3.bolsa.domain.transacao.TransacaoDeCompraDto;
 import A3.bolsa.mappers.InvestidorMapper;
 import A3.bolsa.processors.transacoes.TransacaoProcessor;
 import A3.bolsa.repositories.InvestidorRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class TransacoesController {
 
     @PostMapping("/comprar/{investidor}")
     @Transactional
-    public ResponseEntity buyPapel(@RequestBody TransacaoDeCompraDto transacao, @PathVariable Long investidor){
+    public ResponseEntity buyPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @PathVariable Long investidor){
 
         var usuarioLogado = repository.findById(investidor);
         if(usuarioLogado.isPresent()){

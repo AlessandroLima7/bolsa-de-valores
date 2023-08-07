@@ -46,6 +46,7 @@ public class TransacaoProcessor {
             updateSaldoInvestidor(investidor, papeModel, transacao.quantidade());
             addPapelToCarteira(investidor, papeModel, transacao.quantidade());
             updateQuatidadePapeis(transacao.quantidade(), papeModel);
+            updateValoresPapeis(papeModel, transacao.quantidade());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -72,6 +73,15 @@ public class TransacaoProcessor {
         var quantidadeNova = quantidadeAntiga - quantidade;
         papelModel.setQuantidade(quantidadeNova);
         papelRepository.save(papeisMapper.modelToEntity(papelModel));
+    }
+
+    public void updateValoresPapeis(Papeis papel, Integer quantidade){
+        var valorAnterior = papel.getValor();
+        papel.setValorAnterior(valorAnterior);
+        var novoValor = valorAnterior + (valorAnterior * (0.0008 * quantidade));
+        papel.setValor(novoValor);
+        var papelToSave = papeisMapper.modelToEntity(papel);
+        papelRepository.save(papelToSave);
     }
 
 }
