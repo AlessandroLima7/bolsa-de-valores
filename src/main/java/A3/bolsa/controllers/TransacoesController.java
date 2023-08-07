@@ -37,4 +37,19 @@ public class TransacoesController {
         return ResponseEntity.badRequest().build();
     }
 
+    @PostMapping("/vender/{investidor}")
+    @Transactional
+    public ResponseEntity sellPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @PathVariable Long investidor){
+
+
+        var usuarioLogado = repository.findById(investidor);
+        if(usuarioLogado.isPresent()){
+            return processor.sellPapelInvestidor(transacao, mapper.entityToModel(usuarioLogado.get()));
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+
+
 }

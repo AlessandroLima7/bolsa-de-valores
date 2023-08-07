@@ -42,11 +42,12 @@ public class TransacaoProcessor {
     public ResponseEntity buyPapelInvestidor(TransacaoDeCompraDto transacao, Investidor investidor){
         var papel = papelRepository.findById(transacao.idPapel());
         if(papel.isPresent()){
+
             var papeModel = papeisMapper.mapToPapeis(papel.get());
             this.validacoes.forEach(v -> v.validarCompra(investidor, transacao, papeModel));
             updateSaldoInvestidorBuy(investidor, papeModel, transacao.quantidade());
             addPapelToCarteira(investidor, papeModel, transacao.quantidade());
-            updateQuatidadePapeis(transacao.quantidade(), papeModel);
+            updateQuatidadePapeisBuy(transacao.quantidade(), papeModel);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -54,19 +55,20 @@ public class TransacaoProcessor {
 
     }
 
+    public ResponseEntity sellPapelInvestidor(TransacaoDeCompraDto transacao, Investidor investidor){
+        var acao = carteiraRepository.findById(transacao.idPapel());
+        if(acao.isPresent()){
+            var modeloAcao = carteiraMapper.entityToModel(acao.get());
+            this.validacoes.forEach(v -> v.validarVenda(investidor, transacao, modeloAcao));
+            var papel = papelRepository.findById(acao.get().getIdPapel()).get();
+            updateSaldoInvestidorSell(investidor, modeloAcao, transacao.quantidade());
+            removePapelFromCarteira(investidor, modeloAcao, transacao.quantidade());
+            updateQuatidadePapeisSell(transacao.quantidade(), papeisMapper.mapToPapeis(papel));
+            return  ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
 
-
-//    public ResponseEntity sellPapelInvestidor(TransacaoDeCompraDto transacao, Investidor investidor){
-//        var acao = carteiraRepository.findById(transacao.idPapel());
-//
-//        if(acao.isPresent()){
-//            var modeloAcao = carteiraMapper.entityToModel(acao.get());
-//            this.validacoes.forEach(v -> v.validarVenda(investidor, transacao, modeloAcao));
-//            var papel = papelRepository.findById(acao.get().getIdPapel());
-//
-//        }
-//
-//    }
+    }
 
 
 
@@ -78,30 +80,77 @@ public class TransacaoProcessor {
         investidorRepository.save(investidorMapper.modelToEntity(investidor));
     }
 
-    private void updateSaldoInvestidorSell(Investidor investidor, Papeis papel, Integer quantidade){
-        var valorDaTransacao = papel.getValor() * quantidade;
+
+    private void updateSaldoInvestidorSell(Investidor investidor, Carteira acao, Integer quantidade){
+        var papel = papelRepository.findById(acao.getIdPapel()).get();
+        var valorToRetrieve = papel.getValor() * quantidade;
+        investidor.setSaldo(investidor.getSaldo() + valorToRetrieve);
+        investidorRepository.save(investidorMapper.modelToEntity(investidor));
+
 
     }
 
     private void addPapelToCarteira(Investidor investidor, Papeis papel, Integer quantidade){
-        var carteira = new Carteira(investidor.getId(), papel.getNomePapel(), papel.getSigla(), papel.getValor(), papel.getDescricaoDoPapel(), quantidade, papel.getId());
-        var carteiraToSave = carteiraMapper.modelToEntity(carteira);
-        carteiraRepository.save(carteiraToSave);
+        var acaoDaCarteira = carteiraRepository.findByfkInvestidorAndIdPapel(investidor.getId(), papel.getId());
+
+        if(acaoDaCarteira.isPresent()){
+            var acao = carteiraMapper.entityToModel(acaoDaCarteira.get());
+            acao.setQuantidade(acao.getQuantidade() + quantidade);
+            carteiraRepository.save(carteiraMapper.modelToEntity(acao));
+        }
+        else {
+            var acao = new Carteira(investidor.getId(), papel.getNomePapel(), papel.getSigla(), papel.getValor(), papel.getDescricaoDoPapel(), quantidade, papel.getId());
+            carteiraRepository.save(carteiraMapper.modelToEntity(acao));
+        }
+
+
+
 
     }
 
-    private void updateQuatidadePapeis(Integer quantidade, Papeis papel){
+    private void removePapelFromCarteira(Investidor investidor, Carteira acao, Integer quantidade){
+        if(acao.getQuantidade() == quantidade){
+            carteiraRepository.delete(carteiraMapper.modelToEntity(acao));
+
+        }
+        else{
+            var quantidadeNova = acao.getQuantidade() - quantidade;
+            acao.setQuantidade(quantidadeNova);
+            var carteiraToSave = carteiraMapper.modelToEntity(acao);
+            carteiraRepository.save(carteiraToSave);
+        }
+
+
+
+    }
+    private void updateQuatidadePapeisSell(Integer quantidade, Papeis papel){
+        var papelModel = papeisMapper.mapToPapeis(papelRepository.findById(papel.getId()).get());
+        var quantidadeAntiga = papelModel.getQuantidade();
+        var quantidadeNova = quantidadeAntiga + quantidade;
+        papelModel.setQuantidade(quantidadeNova);
+        var papelSaved = papelRepository.save(papeisMapper.modelToEntity(papelModel));
+        updateValoresPapeisSell(papeisMapper.mapToPapeis(papelSaved), quantidade);
+    }
+    private void updateQuatidadePapeisBuy(Integer quantidade, Papeis papel){
         var papelModel = papeisMapper.mapToPapeis(papelRepository.findById(papel.getId()).get());
         var quantidadeAntiga = papelModel.getQuantidade();
         var quantidadeNova = quantidadeAntiga - quantidade;
         papelModel.setQuantidade(quantidadeNova);
         var papelSaved = papelRepository.save(papeisMapper.modelToEntity(papelModel));
-        updateValoresPapeis(papeisMapper.mapToPapeis(papelSaved), quantidade);
+        updateValoresPapeisBuy(papeisMapper.mapToPapeis(papelSaved), quantidade);
     }
 
-    private void updateValoresPapeis(Papeis papel, Integer quantidade){
+    private void updateValoresPapeisBuy(Papeis papel, Integer quantidade){
         var valorAnterior = papel.getValor();
         var novoValor = valorAnterior + (valorAnterior * (0.00005 * quantidade));
+        papel.updateValor(novoValor);
+        var papelToSave = papeisMapper.modelToEntity(papel);
+        papelRepository.save(papelToSave);
+    }
+
+    private void updateValoresPapeisSell(Papeis papel, Integer quantidade){
+        var valorAnterior = papel.getValor();
+        var novoValor = valorAnterior - (valorAnterior * (0.00005 * quantidade));
         papel.updateValor(novoValor);
         var papelToSave = papeisMapper.modelToEntity(papel);
         papelRepository.save(papelToSave);
