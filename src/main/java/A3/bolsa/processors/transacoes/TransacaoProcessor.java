@@ -5,6 +5,7 @@ import A3.bolsa.domain.carteira.Carteira;
 import A3.bolsa.domain.investidor.Investidor;
 import A3.bolsa.domain.papeis.Papeis;
 import A3.bolsa.domain.transacao.TransacaoDeCompraDto;
+import A3.bolsa.domain.usuario.Usuario;
 import A3.bolsa.mappers.CarteiraMapper;
 import A3.bolsa.mappers.InvestidorMapper;
 import A3.bolsa.mappers.PapeisMapper;
@@ -39,7 +40,8 @@ public class TransacaoProcessor {
         this.investidorMapper = investidorMapper;
     }
 
-    public ResponseEntity buyPapelInvestidor(TransacaoDeCompraDto transacao, Investidor investidor){
+    public ResponseEntity buyPapelInvestidor(TransacaoDeCompraDto transacao, Usuario usuarioLogado){
+        var investidor = investidorMapper.entityToModel(investidorRepository.findById(usuarioLogado.getId()).get());
         var papel = papelRepository.findById(transacao.idPapel());
         if(papel.isPresent()){
 
@@ -55,7 +57,8 @@ public class TransacaoProcessor {
 
     }
 
-    public ResponseEntity sellPapelInvestidor(TransacaoDeCompraDto transacao, Investidor investidor){
+    public ResponseEntity sellPapelInvestidor(TransacaoDeCompraDto transacao, Usuario usuarioLogado){
+        var investidor = investidorMapper.entityToModel(investidorRepository.findById(usuarioLogado.getId()).get());
         var acao = carteiraRepository.findById(transacao.idPapel());
         if(acao.isPresent()){
             var modeloAcao = carteiraMapper.entityToModel(acao.get());

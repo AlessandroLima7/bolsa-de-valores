@@ -38,7 +38,7 @@ public class BolsaThread extends Thread{
                 papelRepository.saveAll(papeisToSave);
 
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(500000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

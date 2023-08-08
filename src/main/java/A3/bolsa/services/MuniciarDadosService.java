@@ -12,6 +12,7 @@ import A3.bolsa.repositories.PapelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class MuniciarDadosService implements ApplicationRunner {
 
         //Subindo investidores no H2
         List<Investidor> investidores = new ArrayList<>();
-        investidores.add(new Investidor(new CadastroInvestidorDto("Alessandro", "Lima", "alessandro@hotmail.com", "ale")));
+        investidores.add(new Investidor(new CadastroInvestidorDto("Alessandro", "Lima", "alessandro@hotmail.com","ale")));
         investidores.add(new Investidor(new CadastroInvestidorDto("Marcos", "Medeiros", "marcos@hotmail.com", "marcos")));
         investidores.add(new Investidor(new CadastroInvestidorDto("Gustavo", "Guanabara", "gustavo@hotmail.com", "gustavo")));
 

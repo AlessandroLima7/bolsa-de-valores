@@ -4,6 +4,7 @@ import A3.bolsa.domain.investidor.Investidor;
 import A3.bolsa.domain.investidor.dtos.BasicosInvestidor;
 import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
 import A3.bolsa.domain.investidor.dtos.DadosInvestidor;
+import A3.bolsa.domain.usuario.Usuario;
 import A3.bolsa.entities.InvestidorEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -36,4 +37,9 @@ public interface InvestidorMapper {
     Investidor dtoToModel(CadastroInvestidorDto investidorDto);
 
     DadosInvestidor modelToCarteiraDto(Investidor investidor);
+
+    Usuario entityToModelUsuario(InvestidorEntity investidor);
+
+
+
 }

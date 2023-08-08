@@ -1,12 +1,14 @@
 package A3.bolsa.controllers;
 
 import A3.bolsa.domain.transacao.TransacaoDeCompraDto;
+import A3.bolsa.domain.usuario.Usuario;
 import A3.bolsa.mappers.InvestidorMapper;
 import A3.bolsa.processors.transacoes.TransacaoProcessor;
 import A3.bolsa.repositories.InvestidorRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,30 +26,16 @@ public class TransacoesController {
     private InvestidorMapper mapper;
 
 
-    @PostMapping("/comprar/{investidor}")
+    @PostMapping("/comprar")
     @Transactional
-    public ResponseEntity buyPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @PathVariable Long investidor){
-
-
-        var usuarioLogado = repository.findById(investidor);
-        if(usuarioLogado.isPresent()){
-            return processor.buyPapelInvestidor(transacao, mapper.entityToModel(usuarioLogado.get()));
-        }
-
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity buyPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @AuthenticationPrincipal Usuario usuarioLogado){
+        return processor.buyPapelInvestidor(transacao, usuarioLogado);
     }
 
-    @PostMapping("/vender/{investidor}")
+    @PostMapping("/vender")
     @Transactional
-    public ResponseEntity sellPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @PathVariable Long investidor){
-
-
-        var usuarioLogado = repository.findById(investidor);
-        if(usuarioLogado.isPresent()){
-            return processor.sellPapelInvestidor(transacao, mapper.entityToModel(usuarioLogado.get()));
-        }
-
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity sellPapel(@Valid @RequestBody TransacaoDeCompraDto transacao, @AuthenticationPrincipal Usuario usuarioLogado){
+        return processor.sellPapelInvestidor(transacao, usuarioLogado);
     }
 
 
