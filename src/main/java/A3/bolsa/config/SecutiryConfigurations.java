@@ -34,6 +34,8 @@ public class SecutiryConfigurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers("/investidor/**").hasRole("ADMIN");
+                    req.requestMatchers("/papeis/adicionar").hasRole("ADMIN");
+                    req.requestMatchers("/transacoes/**").hasRole("INVESTIDOR");
                     req.requestMatchers( PathRequest.toH2Console()).permitAll();
                     req.requestMatchers(HttpMethod.GET, "/papeis/all");
                     req.requestMatchers( "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
