@@ -1,6 +1,6 @@
 package A3.bolsa.controllers;
 
-import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
+import A3.bolsa.domain.usuario.dto.DadosCadastroUsuario;
 import A3.bolsa.processors.InvestidorProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class InvestidorController {
     }
 
     @PostMapping("/adicionar")
-    public ResponseEntity addInvestidor(@RequestBody CadastroInvestidorDto investidorDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity addInvestidor(@RequestBody DadosCadastroUsuario investidorDto, UriComponentsBuilder uriBuilder){
         return processor.addInvestidor(investidorDto, uriBuilder);
     }
 

@@ -1,20 +1,25 @@
 package A3.bolsa.services;
 
+import A3.bolsa.domain.admin.Admin;
 import A3.bolsa.domain.investidor.Investidor;
-import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
 import A3.bolsa.domain.papeis.Papeis;
 import A3.bolsa.domain.papeis.dto.CadastroPapelDto;
+import A3.bolsa.domain.usuario.ROLE;
+import A3.bolsa.domain.usuario.dto.DadosCadastroUsuario;
+import A3.bolsa.entities.AdminEntity;
+import A3.bolsa.mappers.AdminMapper;
 import A3.bolsa.mappers.InvestidorMapper;
 import A3.bolsa.mappers.PapeisMapper;
+import A3.bolsa.repositories.AdminRepository;
 import A3.bolsa.repositories.CarteiraRepository;
 import A3.bolsa.repositories.InvestidorRepository;
 import A3.bolsa.repositories.PapelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,16 +31,22 @@ public class MuniciarDadosService implements ApplicationRunner {
 
     private final CarteiraRepository carteiraRepository;
 
+    private final AdminRepository adminRepository;
+
     @Autowired
     private PapeisMapper papeisMapper;
 
     @Autowired
-    InvestidorMapper investidorMapper;
+    private InvestidorMapper investidorMapper;
 
-    public MuniciarDadosService(PapelRepository papelRepository, InvestidorRepository investidorRepository, CarteiraRepository carteiraRepository) {
+    @Autowired
+    private AdminMapper adminMapper;
+
+    public MuniciarDadosService(PapelRepository papelRepository, InvestidorRepository investidorRepository, CarteiraRepository carteiraRepository, AdminRepository adminRepository) {
         this.papelRepository = papelRepository;
         this.investidorRepository = investidorRepository;
         this.carteiraRepository = carteiraRepository;
+        this.adminRepository = adminRepository;
     }
 
 
@@ -53,11 +64,18 @@ public class MuniciarDadosService implements ApplicationRunner {
 
         //Subindo investidores no H2
         List<Investidor> investidores = new ArrayList<>();
-        investidores.add(new Investidor(new CadastroInvestidorDto("Alessandro", "Lima", "alessandro@hotmail.com","ale")));
-        investidores.add(new Investidor(new CadastroInvestidorDto("Marcos", "Medeiros", "marcos@hotmail.com", "marcos")));
-        investidores.add(new Investidor(new CadastroInvestidorDto("Gustavo", "Guanabara", "gustavo@hotmail.com", "gustavo")));
+        investidores.add(new Investidor(new DadosCadastroUsuario("Alessandro", "Lima", "alessandro@hotmail.com","ale", ROLE.INVESTIDOR)));
+        investidores.add(new Investidor(new DadosCadastroUsuario("Marcos", "Medeiros", "marcos@hotmail.com", "marcos", ROLE.INVESTIDOR)));
+        investidores.add(new Investidor(new DadosCadastroUsuario("Gustavo", "Guanabara", "gustavo@hotmail.com", "gustavo", ROLE.INVESTIDOR)));
 
         investidorRepository.saveAll(investidorMapper.listModelToEntity(investidores));
+
+
+        Admin admin = new Admin(new DadosCadastroUsuario("Alessandro", "Lima", "sandro@hotmail.com", "ale", ROLE.ADMIN));
+
+        AdminEntity adminEntity = adminMapper.modelToEntity(admin);
+
+        adminRepository.save(adminEntity);
 
         var bolsaEmTempoReal = new BolsaThread(papelRepository, papeisMapper);
         bolsaEmTempoReal.start();

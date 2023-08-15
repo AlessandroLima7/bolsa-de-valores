@@ -1,7 +1,7 @@
 package A3.bolsa.domain.usuario;
 
 
-import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
+import A3.bolsa.domain.usuario.dto.DadosCadastroUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +11,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 
 
 @Getter
@@ -26,17 +28,21 @@ public class Usuario implements UserDetails {
     private String lastName;
     private String email;
     private String senha;
+    private ROLE role;
 
-    public Usuario(CadastroInvestidorDto investidorDto) {
-        this.firstName = investidorDto.firstName();
-        this.lastName = investidorDto.lastName();
-        this.email = investidorDto.email();
-        this.senha = new BCryptPasswordEncoder().encode(investidorDto.senha());
+    public Usuario(DadosCadastroUsuario cadastroDto) {
+        this.firstName = cadastroDto.firstName();
+        this.lastName = cadastroDto.lastName();
+        this.email = cadastroDto.email();
+        this.senha = new BCryptPasswordEncoder().encode(cadastroDto.senha());
+        this.role = cadastroDto.role();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+        list.add(new SimpleGrantedAuthority(String.format("ROLE_%s", this.role)));
+        return list;
     }
 
     @Override

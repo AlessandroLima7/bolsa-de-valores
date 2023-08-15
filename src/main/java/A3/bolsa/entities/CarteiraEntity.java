@@ -41,4 +41,5 @@ public class CarteiraEntity {
     private Integer quantidade;
 
 
+
 }

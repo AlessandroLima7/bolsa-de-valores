@@ -2,8 +2,8 @@ package A3.bolsa.domain.investidor;
 
 
 import A3.bolsa.domain.carteira.Carteira;
-import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
 import A3.bolsa.domain.usuario.Usuario;
+import A3.bolsa.domain.usuario.dto.DadosCadastroUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +21,8 @@ public class Investidor extends Usuario {
     private List<Carteira> carteira;
     private Double saldo;
 
-    public Investidor(CadastroInvestidorDto investidorDto) {
-       super(investidorDto);
+    public Investidor(DadosCadastroUsuario cadastroDto) {
+       super(cadastroDto);
         this.saldo = 5000.00;
     }
 }

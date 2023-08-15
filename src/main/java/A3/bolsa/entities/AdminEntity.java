@@ -1,6 +1,5 @@
 package A3.bolsa.entities;
 
-
 import A3.bolsa.domain.usuario.ROLE;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,17 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-
 @Entity
-@Table(name = "investidor")
+@Table(name = "admin")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class InvestidorEntity {
-
+@AllArgsConstructor
+public class AdminEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,15 +32,9 @@ public class InvestidorEntity {
     @Column(name = "senha")
     private String senha;
 
-    @OneToMany
-    @JoinColumn(name = "fk_investidor")
-    private List<CarteiraEntity> carteira;
-
-    @Column(name = "saldo")
-    private Double saldo;
-
     @Column(name = "role")
     private String role;
+
 
 
 }

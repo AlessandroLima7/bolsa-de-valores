@@ -1,7 +1,7 @@
 package A3.bolsa.processors;
 
 import A3.bolsa.domain.investidor.Investidor;
-import A3.bolsa.domain.investidor.dtos.CadastroInvestidorDto;
+import A3.bolsa.domain.usuario.dto.DadosCadastroUsuario;
 import A3.bolsa.mappers.InvestidorMapper;
 import A3.bolsa.repositories.InvestidorRepository;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public class InvestidorProcessor {
     }
 
 
-    public ResponseEntity addInvestidor(CadastroInvestidorDto investidorDto, UriComponentsBuilder uriBuider) {
+    public ResponseEntity addInvestidor(DadosCadastroUsuario investidorDto, UriComponentsBuilder uriBuider) {
         var investidorToSave = investidorMapper.modelToEntity(new Investidor(investidorDto));
         var investidorSaved = investidorRepository.save(investidorToSave);
         var uri = uriBuider.path("/investidor/id/{id}").buildAndExpand(investidorSaved.getId()).toUri();

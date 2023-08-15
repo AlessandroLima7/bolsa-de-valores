@@ -33,6 +33,7 @@ public class SecutiryConfigurations {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers("/investidor/**").hasRole("ADMIN");
                     req.requestMatchers( PathRequest.toH2Console()).permitAll();
                     req.requestMatchers(HttpMethod.GET, "/papeis/all");
                     req.requestMatchers( "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
